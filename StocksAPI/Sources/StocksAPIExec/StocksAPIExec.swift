@@ -16,29 +16,17 @@ struct StocksAPIExec {
             return
         }
 
-        let urlString = "https://yh-finance.p.rapidapi.com/market/v2/get-quotes?symbols=AAPL,GOOG"
-        guard let url = URL(string: urlString) else {
-            print("Invalid URL")
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue(config.rapidapi_host, forHTTPHeaderField: "x-rapidapi-host")
-        request.setValue(config.rapidapi_key, forHTTPHeaderField: "x-rapidapi-key")
+        let quoteService = QuoteService(config: config)
+        let tickerService = TickerSearchService(config: config)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            //let quotes = try await quoteService.fetchQuotes(symbols: ["AAPL", "GOOG"])
+            //print(quotes)
 
-            if let httpResponse = response as? HTTPURLResponse {
-                print("Status code: \(httpResponse.statusCode)")
-            }
-
-            let quoteResponse = try JSONDecoder().decode(QuoteResponse.self, from: data)
-            print(quoteResponse)
-
+            let tslaQuote = try await tickerService.fetchTicker(symbol: "TSLA")
+            print(tslaQuote)
         } catch {
-            print("Request failed: \(error)")
+            print("❌ API 요청 실패: \(error)")
         }
     }
 }
