@@ -11,7 +11,7 @@ public final class TickerSearchService {
     
     public static let shared = TickerSearchService()
     
-    private init() {}
+    public init() {}
     
     public func getTicker(query: String) async throws -> SearchTickerResponse {
         let endpoint = Endpoint.YahooFinance.searchTicker(region: "US", query: query).endpointItem

@@ -1,10 +1,19 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-public struct StocksAPI {
-    public private(set) var text = "Hello World"
+import StocksAPI
+
+public final class StocksAPI {
     
-    public init() {
-        
+    public static let shared = StocksAPI()
+    
+    public let quoteService: QuoteService
+    public let chartService: ChartService
+    public let tickerSearchService: TickerSearchService
+    
+    private init() {
+        self.quoteService = QuoteService()
+        self.chartService = ChartService()
+        self.tickerSearchService = TickerSearchService()
     }
 }

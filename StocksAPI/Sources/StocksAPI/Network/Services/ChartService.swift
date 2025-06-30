@@ -11,7 +11,7 @@ public final class ChartService {
     
     public static let shared = ChartService()
     
-    private init() {}
+    public init() {}
     
     public func getChart(symbol: String, range: ChartRange) async throws -> ChartResponse {
         let endpoint = Endpoint.YahooFinance.getChart(

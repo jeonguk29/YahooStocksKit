@@ -11,7 +11,7 @@ public final class QuoteService {
     
     public static let shared = QuoteService()
     
-    private init() {}
+    public init() {}
     
     public func getQuotes(symbols: [String]) async throws -> QuoteResponse {
         let symbolsQuery = symbols.joined(separator: ",")
