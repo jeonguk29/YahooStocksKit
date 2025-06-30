@@ -5,20 +5,32 @@ import PackageDescription
 
 let package = Package(
     name: "StocksAPI",
-    platforms: [.iOS(.v16), .macOS(.v12), .watchOS(.v8), .tvOS(.v16)], // 라이브러리 지원 플랫폼 설정
+    platforms: [
+        .iOS(.v16),
+        .macOS(.v12),
+        .watchOS(.v8),
+        .tvOS(.v16)
+    ],
     products: [
         .library(
             name: "StocksAPI",
-            targets: ["StocksAPI"]),
-        .executable(name: "StocksAPIExec", targets: ["StocksAPIExec"])
+            targets: ["StocksAPI"]
+        ),
+        .executable(
+            name: "StocksAPIExec",
+            targets: ["StocksAPIExec"]
+        )
     ],
     targets: [
         .target(
-            name: "StocksAPI"
+            name: "StocksAPI",
+            dependencies: [],
+            path: "Sources/StocksAPI"
         ),
         .executableTarget(
             name: "StocksAPIExec",
-            dependencies: ["StocksAPI"]
+            dependencies: ["StocksAPI"],
+            path: "Sources/StocksAPIExec"
         ),
         .testTarget(
             name: "StocksAPITests",
