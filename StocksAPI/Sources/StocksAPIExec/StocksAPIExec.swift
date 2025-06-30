@@ -11,22 +11,21 @@ import StocksAPI
 @main
 struct StocksAPIExec {
     static func main() async {
-        guard let config = APIConfig.load() else {
-            print("❌ API 설정 로드 실패")
-            return
-        }
-
-        let quoteService = QuoteService(config: config)
-        let tickerService = TickerSearchService(config: config)
-
         do {
-            //let quotes = try await quoteService.fetchQuotes(symbols: ["AAPL", "GOOG"])
-            //print(quotes)
-
-            let tslaQuote = try await tickerService.fetchTicker(symbol: "TSLA")
-            print(tslaQuote)
+            print("\n✅ Quotes 조회 테스트")
+            let quotes = try await QuoteService.shared.getQuotes(symbols: ["AAPL", "GOOG"])
+            print(quotes)
+            
+            print("\n✅ Ticker Search 테스트")
+            let tickers = try await TickerSearchService.shared.getTicker(query: "tesla")
+            print(tickers)
+            
+            print("\n✅ Chart 데이터 테스트")
+            let chart = try await ChartService.shared.getChart(symbol: "TSLA", range: .oneDay)
+            print(chart)
+            
         } catch {
-            print("❌ API 요청 실패: \(error)")
+            print("\n❌ API 호출 실패: \(error.localizedDescription)")
         }
     }
 }

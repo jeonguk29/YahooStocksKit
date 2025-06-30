@@ -13,11 +13,11 @@ public final class ChartService {
     
     private init() {}
     
-    public func getChart(symbol: String) async throws -> ChartResponse {
+    public func getChart(symbol: String, range: ChartRange) async throws -> ChartResponse {
         let endpoint = Endpoint.YahooFinance.getChart(
             symbol: symbol,
-            range: "5y",
-            interval: "1mo",
+            range: range.rawValue,
+            interval: range.interval,
             region: "US",
             includePrePost: false,
             useYfid: true,
