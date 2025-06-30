@@ -15,7 +15,7 @@ public struct APIConfig: Codable {
 extension APIConfig {
     public static func load() -> APIConfig? {
         let fileManager = FileManager.default
-        let configPath = fileManager.currentDirectoryPath + "/APIConfig.json"
+        let configPath = fileManager.currentDirectoryPath + "/Resources/APIConfig.json"
 
         guard let data = fileManager.contents(atPath: configPath) else {
             print("⚠️ APIConfig.json 파일을 찾을 수 없습니다. 경로: \(configPath)")
