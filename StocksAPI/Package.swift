@@ -15,22 +15,11 @@ let package = Package(
         .library(
             name: "StocksAPI",
             targets: ["StocksAPI"]
-        ),
-        .executable(
-            name: "StocksAPIExec",
-            targets: ["StocksAPIExec"]
         )
     ],
     targets: [
         .target(
-            name: "StocksAPI",
-            dependencies: [],
-            path: "Sources/StocksAPI"
-        ),
-        .executableTarget(
-            name: "StocksAPIExec",
-            dependencies: ["StocksAPI"],
-            path: "Sources/StocksAPIExec"
+            name: "StocksAPI"
         ),
         .testTarget(
             name: "StocksAPITests",
