@@ -14,13 +14,15 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "StocksAPI",
-            path: "Sources/StocksAPI"
+            name: "StocksAPI"
         ),
         .executableTarget(
             name: "StocksAPIExec",
-            dependencies: ["StocksAPI"],
-            path: "Sources/StocksAPIExec"
+            dependencies: ["StocksAPI"]
+        ),
+        .testTarget(
+            name: "StocksAPITests",
+            dependencies: ["StocksAPI"]
         )
     ]
 )
