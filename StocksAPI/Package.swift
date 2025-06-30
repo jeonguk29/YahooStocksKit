@@ -17,9 +17,14 @@ let package = Package(
             targets: ["StocksAPI"]
         )
     ],
+    dependencies: [
+        // YahooStocksKit 의존성 추가
+        .package(url: "https://github.com/jeonguk29/YahooStocksKit.git", branch: "main")
+    ],
     targets: [
         .target(
-            name: "StocksAPI"
+            name: "StocksAPI",
+            dependencies: ["YahooStocksKit"]
         ),
         .testTarget(
             name: "StocksAPITests",

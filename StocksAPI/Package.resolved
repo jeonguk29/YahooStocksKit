@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "yahoostockskit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jeonguk29/YahooStocksKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9162aebd6bd7da607aeb7689d35d0c2178f5c005"
+      }
+    }
+  ],
+  "version" : 2
+}
