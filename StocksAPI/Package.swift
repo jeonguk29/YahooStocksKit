@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "StocksAPI",
+    name: "YahooStocksKit",
     platforms: [
         .iOS(.v16),
         .macOS(.v12),
@@ -13,22 +13,28 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "StocksAPI",
+            name: "YahooStocksKit",
             targets: ["StocksAPI"]
+        ),
+        .executable(
+            name: "StocksAPIExec",
+            targets: ["StocksAPIExec"]
         )
-    ],
-    dependencies: [
-        // YahooStocksKit 의존성 추가
-        .package(url: "https://github.com/jeonguk29/YahooStocksKit.git", branch: "main")
     ],
     targets: [
         .target(
             name: "StocksAPI",
-            dependencies: ["YahooStocksKit"]
+            path: "Sources/StocksAPI"
+        ),
+        .executableTarget(
+            name: "StocksAPIExec",
+            dependencies: ["StocksAPI"],
+            path: "Sources/StocksAPIExec"
         ),
         .testTarget(
             name: "StocksAPITests",
-            dependencies: ["StocksAPI"]
+            dependencies: ["StocksAPI"],
+            path: "Tests/StocksAPITests"
         )
     ]
 )
