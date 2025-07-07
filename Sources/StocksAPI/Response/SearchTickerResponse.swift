@@ -42,11 +42,11 @@ public struct Ticker: Decodable, Identifiable, Hashable {
     public let sector: String?
     public let industry: String?
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case symbol, shortname, longname, quoteType, exchDisp, sector, industry
     }
     
-    init(symbol: String, shortname: String?, longname: String?, quoteType: String?, exchDisp: String?, sector: String?, industry: String?) {
+    public init(symbol: String, shortname: String?, longname: String?, quoteType: String?, exchDisp: String?, sector: String?, industry: String?) {
         self.symbol = symbol
         self.shortname = shortname
         self.longname = longname
@@ -56,3 +56,17 @@ public struct Ticker: Decodable, Identifiable, Hashable {
         self.industry = industry
     }
 }
+
+extension Ticker {
+    /// Stub 용 간단 생성자
+    public init(symbol: String, shortname: String) {
+        self.symbol = symbol
+        self.shortname = shortname
+        self.longname = nil
+        self.quoteType = nil
+        self.exchDisp = nil
+        self.sector = nil
+        self.industry = nil
+    }
+}
+

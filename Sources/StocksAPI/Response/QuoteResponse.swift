@@ -125,3 +125,33 @@ public struct Quote: Decodable, Identifiable, Hashable {
         self.epsTrailingTwelveMonths = epsTrailingTwelveMonths
     }
 }
+
+extension Quote {
+    /// Stub 용 간단 생성자
+    public init(symbol: String, regularMarketPrice: Double, regularMarketChange: Double) {
+        self.symbol = symbol
+        self.regularMarketPrice = regularMarketPrice
+        self.regularMarketChange = regularMarketChange
+
+        // 나머지 필드들 기본값 지정
+        self.currency = nil
+        self.marketState = nil
+        self.fullExchangeName = nil
+        self.displayName = nil
+        self.regularMarketChangePercent = nil
+        self.regularMarketChangePreviousClose = nil
+        self.postMarketPrice = nil
+        self.postMarketPriceChange = nil
+        self.regularMarketOpen = nil
+        self.regularMarketDayHigh = nil
+        self.regularMarketDayLow = nil
+        self.regularMarketVolume = nil
+        self.trailingPE = nil
+        self.marketCap = nil
+        self.fiftyTwoWeekLow = nil
+        self.fiftyTwoWeekHigh = nil
+        self.averageDailyVolume3Month = nil
+        self.trailingAnnualDividendYield = nil
+        self.epsTrailingTwelveMonths = nil
+    }
+}
