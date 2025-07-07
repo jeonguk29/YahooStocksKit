@@ -11,7 +11,7 @@ public final class StocksAPI {
     public let chartService: ChartService
     public let tickerSearchService: TickerSearchService
     
-    private init() {
+    public init() {
         self.quoteService = QuoteService()
         self.chartService = ChartService()
         self.tickerSearchService = TickerSearchService()
