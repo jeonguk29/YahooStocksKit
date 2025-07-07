@@ -112,3 +112,6 @@ xcuserdata
 
 # Config 파일 무시
 *.xcconfig
+APIConfig.json
+Sources/StocksAPI/Resources/APIConfig.json
+
