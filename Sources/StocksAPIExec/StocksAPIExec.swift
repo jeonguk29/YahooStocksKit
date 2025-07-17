@@ -12,19 +12,19 @@ import StocksAPI
 struct StocksAPIExec {
     
     static func main() async {
-        let stocksAPI = StocksAPI.shared
+        let stockService: StockServiceProtocol = StocksAPI.shared
         
         do {
             print("\n✅ Quotes 조회 테스트")
-            let quotes = try await stocksAPI.quoteService.getQuotes(symbols: ["AAPL", "GOOG"])
+            let quotes = try await stockService.fetchQuotes(symbols: "AAPL,GOOG")
             print(quotes)
             
             print("\n✅ Ticker 검색 테스트")
-            let tickers = try await stocksAPI.tickerSearchService.getTicker(query: "TSLA")
+            let tickers = try await stockService.searchTickers(query: "TSLA", isEquityTypeOnly: true)
             print(tickers)
             
             print("\n✅ Chart 조회 테스트")
-            let chart = try await stocksAPI.chartService.getChart(symbol: "TSLA", range: .fiveYear)
+            let chart = try await stockService.fetchChartData(tickerSymbol: "TSLA", range: .fiveYear)
             print(chart)
             
         } catch {
