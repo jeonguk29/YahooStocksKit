@@ -13,15 +13,15 @@ public final class QuoteService {
     
     public init() {}
     
-    public func getQuotes(symbols: [String]) async throws -> QuoteResponse {
-        let symbolsQuery = symbols.joined(separator: ",")
+    public func fetchQuotes(symbols: String) async throws -> [Quote] {
+        let endpoint = Endpoint.YahooFinance.getQuotes(symbols: symbols).endpointItem
         
-        let endpoint = Endpoint.YahooFinance.getQuotes(symbols: symbolsQuery).endpointItem
-        
-        return try await APIService.shared.request(
+        let response = try await APIService.shared.request(
             path: endpoint.pathWithQuery,
             method: endpoint.method,
             responseType: QuoteResponse.self
         )
+        
+        return response.data ?? []
     }
 }

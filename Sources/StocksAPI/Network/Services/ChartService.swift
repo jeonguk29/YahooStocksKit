@@ -13,9 +13,9 @@ public final class ChartService {
     
     public init() {}
     
-    public func getChart(symbol: String, range: ChartRange) async throws -> ChartResponse {
+    public func fetchChartData(tickerSymbol: String, range: ChartRange) async throws -> ChartData {
         let endpoint = Endpoint.YahooFinance.getChart(
-            symbol: symbol,
+            symbol: tickerSymbol,
             range: range.rawValue,
             interval: range.interval,
             region: "US",
@@ -25,10 +25,20 @@ public final class ChartService {
             events: "capitalGain,div,split"
         ).endpointItem
         
-        return try await APIService.shared.request(
+        let response = try await APIService.shared.request(
             path: endpoint.pathWithQuery,
             method: endpoint.method,
             responseType: ChartResponse.self
         )
+        
+        if let error = response.error {
+            throw APIServiceError.httpStatusCodeFailed(statusCode: 200, error: error)
+        }
+        
+        guard let chartData = response.data?.first else {
+            throw APIServiceError.invalidResponseType
+        }
+        
+        return chartData
     }
 }
