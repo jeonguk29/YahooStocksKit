@@ -31,7 +31,7 @@ public struct SearchTickerResponse: Decodable {
     }
 }
 
-public struct Ticker: Decodable, Identifiable, Hashable {
+public struct Ticker: Decodable, Identifiable, Hashable, Equatable {
     public let id = UUID()
     
     public let symbol: String
