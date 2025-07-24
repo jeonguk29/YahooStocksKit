@@ -46,7 +46,15 @@ public struct Ticker: Codable, Identifiable, Hashable, Equatable {
         case symbol, shortname, longname, quoteType, exchDisp, sector, industry
     }
     
-    public init(symbol: String, shortname: String?, longname: String?, quoteType: String?, exchDisp: String?, sector: String?, industry: String?) {
+    public init(
+        symbol: String,
+        shortname: String? = nil,
+        longname: String? = nil,
+        quoteType: String? = nil,
+        exchDisp: String? = nil,
+        sector: String? = nil,
+        industry: String? = nil
+    ) {
         self.symbol = symbol
         self.shortname = shortname
         self.longname = longname
