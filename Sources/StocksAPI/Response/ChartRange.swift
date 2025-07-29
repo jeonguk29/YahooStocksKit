@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ChartRange: String {
+public enum ChartRange: String, CaseIterable {
     
     case oneDay = "1d"
     case oneWeek = "5d"
