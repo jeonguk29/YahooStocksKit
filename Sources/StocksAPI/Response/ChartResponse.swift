@@ -13,7 +13,7 @@ import Foundation
 public struct ChartResponse: Decodable {
     
     /// 차트 데이터 (기간별 시세 정보들)
-    let data: [ChartData]?
+    public let data: [ChartData]?
     
     /// API 에러 정보
     let error: ErrorResponse?
