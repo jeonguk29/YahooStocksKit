@@ -9,9 +9,11 @@ import Foundation
 
 public final class ChartService {
     
-    public static let shared = ChartService()
+    private let apiService: APIRequestable
     
-    public init() {}
+    public init(apiService: APIRequestable) {
+        self.apiService = apiService
+    }
     
     public func fetchChartData(tickerSymbol: String, range: ChartRange) async throws -> ChartData {
         let endpoint = Endpoint.YahooFinance.getChart(
@@ -25,12 +27,12 @@ public final class ChartService {
             events: "capitalGain,div,split"
         ).endpointItem
         
-        let response = try await APIService.shared.request(
-            path: endpoint.pathWithQuery,
-            method: endpoint.method,
+        let response = try await apiService.request(
+            endpoint: endpoint,
             responseType: ChartResponse.self
         )
         
+        // 서버가 200을 반환했지만, body에 에러 정보가 들어있는 경우
         if let error = response.error {
             throw APIServiceError.httpStatusCodeFailed(statusCode: 200, error: error)
         }

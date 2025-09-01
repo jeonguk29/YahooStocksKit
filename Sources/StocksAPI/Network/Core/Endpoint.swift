@@ -8,7 +8,7 @@
 import Foundation
 
 /// 최종 URL Path + QueryString을 조립하기 위한 구조체
-struct EndpointItem {
+public struct EndpointItem {
     let path: String
     let method: HTTPMethod
     let queryItems: [URLQueryItem]

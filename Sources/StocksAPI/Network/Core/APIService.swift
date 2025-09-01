@@ -7,64 +7,71 @@
 
 import Foundation
 
-final class APIService {
-    static let shared = APIService()
+public protocol APIRequestable {
+    func request<T: Decodable>(
+        endpoint: EndpointItem,
+        responseType: T.Type
+    ) async throws -> T
+}
+
+public final class APIService: APIRequestable {
+    private let baseURL: String
+    private let config: APIConfig
+    private let session: URLSession
     
-    private let baseURL: String = "https://yh-finance.p.rapidapi.com"
-    private let config: APIConfig?
-    
-    private init() {
-        guard let loadedConfig = APIConfig.load() else {
-            fatalError("❌ API 설정 로드 실패")
-        }
-        self.config = loadedConfig
+    public init(
+        baseURL: String = "https://yh-finance.p.rapidapi.com",
+        config: APIConfig,
+        session: URLSession = .shared
+    ) {
+        self.baseURL = baseURL
+        self.config = config
+        self.session = session
     }
     
-    func request<T: Decodable>(
-        path: String,
-        method: HTTPMethod,
-        headers: [String : String]? = nil,
-        body: Data? = nil,
+    public func request<T: Decodable>(
+        endpoint: EndpointItem,
         responseType: T.Type
     ) async throws -> T {
-        guard let url = URL(string: baseURL + path) else {
+        // URL 생성
+        guard var components = URLComponents(string: baseURL + endpoint.path) else {
+            throw NetworkError.invalidURL
+        }
+        components.queryItems = endpoint.queryItems
+        
+        guard let url = components.url else {
             throw NetworkError.invalidURL
         }
         
+        // 요청 생성
         var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-        request.setValue(config?.rapidapi_host, forHTTPHeaderField: "x-rapidapi-host")
-        request.setValue(config?.rapidapi_key, forHTTPHeaderField: "x-rapidapi-key")
-        if let headers {
-            for (key, value) in headers {
-                request.setValue(value, forHTTPHeaderField: key)
-            }
-        }
+        request.httpMethod = endpoint.method.rawValue
+        request.setValue(config.rapidapi_host, forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(config.rapidapi_key, forHTTPHeaderField: "x-rapidapi-key")
         
-        request.httpBody = body
+        // 네트워크 호출
+        let (data, response) = try await session.data(for: request)
         
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
+        // 응답 검증
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.responseError
         }
         
+        // 상태코드 에러 처리
         guard (200...299).contains(httpResponse.statusCode) else {
-            throw configureHTTPError(errorCode: httpResponse.statusCode)
+            throw configureHTTPError(errorCode: httpResponse.statusCode, data: data)
         }
         
+        // 성공 응답 디코딩
         do {
             return try JSONDecoder().decode(T.self, from: data)
-        } catch let decodingError as DecodingError {
-            print("❌ DecodingError: \(decodingError)")
-            throw NetworkError.responseDecodingError
         } catch {
-            print("❌ 일반 에러: \(error)")
             throw NetworkError.responseDecodingError
         }
     }
     
-    private func configureHTTPError(errorCode: Int) -> Error {
+    // MARK: - 상태 코드 매핑 함수
+    private func configureHTTPError(errorCode: Int, data: Data?) -> Error {
         switch errorCode {
         case 400:
             return NetworkError.loginFailed
@@ -75,6 +82,11 @@ final class APIService {
         case 500:
             return NetworkError.internalServerError
         default:
+            // 서버가 내려준 에러 응답(JSON) 파싱 시도
+            if let data,
+               let errResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                return NetworkError.yahooAPIError(errResponse)
+            }
             return NetworkError.unknownError
         }
     }
