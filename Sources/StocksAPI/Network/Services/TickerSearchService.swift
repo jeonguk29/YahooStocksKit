@@ -7,19 +7,20 @@
 
 import Foundation
 
-
 public final class TickerSearchService {
     
-    public static let shared = TickerSearchService()
+    private let apiService: APIRequestable
     
-    public init() {}
+    // 기본은 실제 APIService를 주입
+    public init(apiService: APIRequestable) {
+        self.apiService = apiService
+    }
     
     public func searchTickers(query: String, isEquityTypeOnly: Bool = true) async throws -> [Ticker] {
         let endpoint = Endpoint.YahooFinance.searchTicker(region: "US", query: query).endpointItem
         
-        let response = try await APIService.shared.request(
-            path: endpoint.pathWithQuery,
-            method: endpoint.method,
+        let response = try await apiService.request(
+            endpoint: endpoint,
             responseType: SearchTickerResponse.self
         )
         

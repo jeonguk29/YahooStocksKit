@@ -9,16 +9,17 @@ import Foundation
 
 public final class QuoteService {
     
-    public static let shared = QuoteService()
+    private let apiService: APIRequestable
     
-    public init() {}
+    public init(apiService: APIRequestable) {
+        self.apiService = apiService
+    }
     
     public func fetchQuotes(symbols: String) async throws -> [Quote] {
         let endpoint = Endpoint.YahooFinance.getQuotes(symbols: symbols).endpointItem
         
-        let response = try await APIService.shared.request(
-            path: endpoint.pathWithQuery,
-            method: endpoint.method,
+        let response = try await apiService.request(
+            endpoint: endpoint,
             responseType: QuoteResponse.self
         )
         

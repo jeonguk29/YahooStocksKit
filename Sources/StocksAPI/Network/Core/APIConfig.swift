@@ -10,6 +10,11 @@ import Foundation
 public struct APIConfig {
     public let rapidapi_key: String
     public let rapidapi_host: String
+    
+    public init(rapidapi_key: String, rapidapi_host: String) {
+        self.rapidapi_key = rapidapi_key
+        self.rapidapi_host = rapidapi_host
+    }
 }
 
 extension APIConfig {
