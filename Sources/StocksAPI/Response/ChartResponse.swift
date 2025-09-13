@@ -179,3 +179,35 @@ public struct ChartData: Decodable {
         }
     }
 }
+
+// MARK: - 테스트 전용 생성자
+extension ChartData {
+    public init(
+        metadata: Metadata = .init(),
+        indicators: [Indicator] = []
+    ) {
+        self.metadata = metadata
+        self.indicators = indicators
+    }
+}
+
+// MARK: - 테스트용 메타 데이터
+extension ChartData.Metadata {
+    public init(
+        currency: String = "USD",
+        symbol: String = "AAPL",
+        regularMarketPrice: Double? = 100,
+        previousClose: Double? = 99,
+        gmtOffset: Int = 0,
+        regularTradingPeriodStartDate: Date = Date(),
+        regularTradingPeriodEndDate: Date = Date()
+    ) {
+        self.currency = currency
+        self.symbol = symbol
+        self.regularMarketPrice = regularMarketPrice
+        self.previousClose = previousClose
+        self.gmtOffset = gmtOffset
+        self.regularTradingPeriodStartDate = regularTradingPeriodStartDate
+        self.regularTradingPeriodEndDate = regularTradingPeriodEndDate
+    }
+}
