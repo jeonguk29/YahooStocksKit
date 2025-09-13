@@ -37,6 +37,7 @@ struct NetworkErrorTests {
     }
     
     @Test("yahooAPIError는 ErrorResponse 내용을 포함한다")
+    ///실제 Yahoo API는 에러가 나면 JSON 안에 code, description을 반환
     func yahooAPIError() {
         let response = ErrorResponse(code: "400", description: "Bad Request")
         let error = NetworkError.yahooAPIError(response)
@@ -45,29 +46,6 @@ struct NetworkErrorTests {
 }
 
 // MARK: - APIService 테스트 (Mock URLProtocol 사용)
-final class MockURLProtocol: URLProtocol {
-    static var mockResponse: (Data?, URLResponse?, Error?)?
-    
-    override class func canInit(with request: URLRequest) -> Bool { true }
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
-    
-    override func startLoading() {
-        if let (data, response, error) = MockURLProtocol.mockResponse {
-            if let error = error {
-                client?.urlProtocol(self, didFailWithError: error)
-            }
-            if let response = response {
-                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-            }
-            if let data = data {
-                client?.urlProtocol(self, didLoad: data)
-            }
-        }
-        client?.urlProtocolDidFinishLoading(self)
-    }
-    override func stopLoading() {}
-}
-
 struct APIServiceTests {
     private func makeAPIService() -> APIService {
         let config = APIConfig(rapidapi_key: "test-key", rapidapi_host: "test-host")
