@@ -6,6 +6,18 @@
 //
 
 import Foundation
+import StocksAPI
+
+// MARK: - 공통 APIService 생성
+extension APIService {
+    static func makeMocked() -> APIService {
+        let config = APIConfig(rapidapi_key: "test-key", rapidapi_host: "test-host")
+        let configSession = URLSessionConfiguration.ephemeral
+        configSession.protocolClasses = [MockURLProtocol.self]
+        let session = URLSession(configuration: configSession)
+        return APIService(config: config, session: session)
+    }
+}
 
 /// - 실제 통신 과정에서는 `Data`, `URLResponse`, `Error` 3가지를 반환하는데,
 ///   여기서는 그 역할을 우리가 직접 지정(mockResponse)한다.

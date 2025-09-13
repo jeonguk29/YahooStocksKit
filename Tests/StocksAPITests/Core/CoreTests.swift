@@ -47,17 +47,11 @@ struct NetworkErrorTests {
 
 // MARK: - APIService 테스트 (Mock URLProtocol 사용)
 struct APIServiceTests {
-    private func makeAPIService() -> APIService {
-        let config = APIConfig(rapidapi_key: "test-key", rapidapi_host: "test-host")
-        let configSession = URLSessionConfiguration.ephemeral
-        configSession.protocolClasses = [MockURLProtocol.self]
-        let session = URLSession(configuration: configSession)
-        return APIService(config: config, session: session)
-    }
     
     @Test("정상 응답은 모델로 디코딩된다")
     func successResponse() async throws {
         defer { MockURLProtocol.mockResponse = nil }
+        
         let json = """
         {
           "quoteResponse": {
@@ -77,7 +71,7 @@ struct APIServiceTests {
         )!
         MockURLProtocol.mockResponse = (json, response, nil)
         
-        let apiService = makeAPIService()
+        let apiService = APIService.makeMocked()
         let endpoint = EndpointItem(path: "/get-quotes", method: .GET, queryItems: [])
         let result: QuoteResponse = try await apiService.request(endpoint: endpoint, responseType: QuoteResponse.self)
         
@@ -87,11 +81,16 @@ struct APIServiceTests {
     @Test("404 응답은 notFoundError를 반환한다")
     func notFoundErrorResponse() async {
         defer { MockURLProtocol.mockResponse = nil }
-        let response = HTTPURLResponse(url: URL(string: "https://test.com")!,
-                                       statusCode: 404, httpVersion: nil, headerFields: nil)!
+        
+        let response = HTTPURLResponse(
+            url: URL(string: "https://test.com")!,
+            statusCode: 404,
+            httpVersion: nil,
+            headerFields: nil
+        )!
         MockURLProtocol.mockResponse = (nil, response, nil)
         
-        let apiService = makeAPIService()
+        let apiService = APIService.makeMocked()
         let endpoint = EndpointItem(path: "/not-found", method: .GET, queryItems: [])
         
         await #expect(throws: NetworkError.notFoundError) {
